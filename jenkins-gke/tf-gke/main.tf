@@ -92,7 +92,7 @@ module "jenkins-gke" {
   node_pools = [
     {
       name         = "butler-pool"
-      min_count    = 3
+      min_count    = 2
       max_count    = 6
       auto_upgrade = true
     }
