@@ -13,7 +13,7 @@
 # limitations under the License.
 
 master:
-  tag: "2.289.1-jdk11"
+  tag: "2.289.2-jdk11"
   containerEnv:
     - name: PROJECT_ID
       valueFrom:
@@ -117,6 +117,30 @@ master:
                               podRetention: "never"
                               activeDeadlineSeconds: "300"
                               slaveConnectTimeout: "1000"
+                            - name: "maven"
+                              namespace: "default"
+                              nodeUsageMode: NORMAL
+                              serviceAccount: ${jenkins_tf_ksa}
+                              label: "maven-exec"
+                              containers:
+                                - name: "maven"
+                                  image: "maven:3.8.1-openjdk-17-slim"
+                                  alwaysPullImage: false
+                                  workingDir: "/home/jenkins/agent"
+                                  ttyEnabled: true
+                                  command: "/bin/sh -c"
+                                  args: "cat"
+                                  resourceRequestCpu: "100m"
+                                  resourceLimitCpu: "500m"
+                                  resourceRequestMemory: "500Mi"
+                                  resourceLimitMemory: "1Gi"
+                              volumes:
+                                - emptyDirVolume:
+                                    memory: false
+                                    mountPath: "/tmp"
+                              podRetention: "never"
+                              activeDeadlineSeconds: "300"
+                              slaveConnectTimeout: "1000" 
         credentials: |
             credentials:
                 system:
